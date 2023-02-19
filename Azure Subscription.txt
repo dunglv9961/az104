@@ -1,0 +1,168 @@
+Name                    Azure subscription VG
+Subscription ID         da8cb5e7-e4a2-4eaf-89aa-4cf044ce488f
+Account                 dunglv11@vingroup.net
+SubscriptionName        Azure subscription VG
+TenantId                ed6a2939-d153-4f92-94f8-3d790d96c9f8
+Environment             AzureCloud
+
+
+Get-AzContext
+
+Name                                     Account                                   SubscriptionName                          Environment                               TenantId
+----                                     -------                                   ----------------                          -----------                               --------
+Azure subscription VG (da8cb5e7-e4a2-4e… dunglv11@vingroup.net                     Azure subscription VG                     AzureCloud                                ed6a2939-d153-4f92-94f8-3d790d96c9f8     
+
+Get-AzSubscription
+
+Name                  Id                                   TenantId                             State
+----                  --                                   --------                             -----
+Azure subscription VG da8cb5e7-e4a2-4eaf-89aa-4cf044ce488f ed6a2939-d153-4f92-94f8-3d790d96c9f8 Enabled
+
+Set-AzContext -Subscription 'da8cb5e7-e4a2-4eaf-89aa-4cf044ce488f'
+
+Name                                     Account                      SubscriptionName            Environment                 TenantId
+----                                     -------                      ----------------            -----------                 --------
+Azure subscription VG (da8cb5e7-e4a2-4e… dunglv11@vingroup.net        Azure subscription VG       AzureCloud                  ed6a2939-d153-4f92-94f8-3d… 
+
+
+--------------------sandbox-----------------
+Get-AzSubscription
+
+Name                   Id                                   TenantId
+----                   --                                   --------             
+Concierge Subscription 5e705062-a6ec-4d9f-b095-33324ea21c15 604c1504-c6a3-4080-8…
+
+PS /home/dunglv9961> Get-AzResourceGroup | Format-Table
+
+ResourceGroupName                          Location ProvisioningState Tags
+-----------------                          -------- ----------------- ----       
+learn-875e5912-a77d-481a-80a1-94b7d93e1308 westus   Succeeded         {[x-create…
+
+ResourceGroupName        : learn-875e5912-a77d-481a-80a1-94b7d93e1308             
+Id                       : /subscriptions/5e705062-a6ec-4d9f-b095-33324ea21c15/re 
+sourceGroups/learn-875e5912-a77d-481a-80a1-94b7d93e1308/providers/Microsoft.Compu 
+te/virtualMachines/testvm-wus-01                                                  
+VmId                     : bf6abd30-5c71-486a-81c1-472efdde60bd                   
+Name                     : testvm-wus-01                                          
+Type                     : Microsoft.Compute/virtualMachines                      
+Location                 : westus                                                 
+Tags                     : {}                                                     
+HardwareProfile          : {VmSize}                                               
+NetworkProfile           : {NetworkInterfaces}                                    
+OSProfile                : {ComputerName, AdminUsername, LinuxConfiguration,      
+Secrets, AllowExtensionOperations, RequireGuestProvisionSignal}                   
+ProvisioningState        : Succeeded                                              
+StorageProfile           : {ImageReference, OsDisk, DataDisks}                    
+FullyQualifiedDomainName : testvm-wus-01-80d47e.WestUS.cloudapp.azure.com         
+TimeCreated              : 2/18/2023 1:19:21 PM 
+
+$vm.HardwareProfile                                                                                 
+VmSize          VmSizeProperties
+------          ----------------
+Standard_D2s_v3 
+
+$vm.StorageProfile.OsDisk
+
+OsType                  : Linux
+EncryptionSettings      : 
+Name                    : testvm-wus-01_disk1_892b6f19ea9c44d589ef6fbda996b7bd
+Vhd                     : 
+Image                   : 
+Caching                 : ReadWrite
+WriteAcceleratorEnabled : 
+DiffDiskSettings        : 
+CreateOption            : FromImage
+DiskSizeGB              : 30
+ManagedDisk             : Microsoft.Azure.Management.Compute.Models.ManagedDiskPa
+                          rameters
+DeleteOption            : Detach
+
+
+Get-AzPublicIpAddress -ResourceGroupName learn-875e5912-a77d-481a-80a1-94b7d93e1308 -Name "testvm-01"    
+
+Name                     : testvm-01
+ResourceGroupName        : learn-875e5912-a77d-481a-80a1-94b7d93e1308
+Location                 : westus
+Id                       : /subscriptions/5e705062-a6ec-4d9f-b095-33324ea21c15/re
+                           sourceGroups/learn-875e5912-a77d-481a-80a1-94b7d93e130
+                           8/providers/Microsoft.Network/publicIPAddresses/testvm
+                           -01
+Etag                     : W/"44a3aa51-ee12-4c10-88fb-8233a1088581"
+ResourceGuid             : 27ac77ec-7329-4278-b3b8-6ad735873cc8
+ProvisioningState        : Succeeded
+Tags                     : 
+PublicIpAllocationMethod : Static
+IpAddress                : 20.253.235.230
+PublicIpAddressVersion   : IPv4
+IdleTimeoutInMinutes     : 4
+IpConfiguration          : {
+                             "Id": "/subscriptions/5e705062-a6ec-4d9f-b095-33324e
+                           a21c15/resourceGroups/learn-875e5912-a77d-481a-80a1-94
+                           b7d93e1308/providers/Microsoft.Network/networkInterfac
+                           es/testvm-wus-01/ipConfigurations/testvm-wus-01"
+                           }
+DnsSettings              : {
+                             "DomainNameLabel": "testvm-wus-01-80d47e",
+                             "Fqdn": 
+                           "testvm-wus-01-80d47e.westus.cloudapp.azure.com"
+                           }
+DdosSettings             : {}
+Zones                    : {}
+Sku                      : {
+                             "Name": "Basic",
+                             "Tier": "Regional"
+                           }
+IpTags                   : []
+ExtendedLocation         : null
+
+
+Stop-AzVM -Name $vm.Name -ResourceGroupName $vm.ResourceGroupName                            
+
+Virtual machine stopping operation
+This cmdlet will stop the specified virtual machine. Do you want to continue?
+[Y] Yes  [N] No  [S] Suspend  [?] Help (default is "Y"): Y
+
+OperationId : 6c399bdb-d8d6-47a3-8a9b-a3fdc74b25ee
+Status      : Succeeded
+StartTime   : 2/18/2023 1:40:47 PM
+EndTime     : 2/18/2023 1:42:18 PM
+Error       : 
+
+
+Get-AzResource -ResourceGroupName $vm.ResourceGroupName | Format-Table                      
+
+Name                                                 ResourceGroupName
+----                                                 -----------------           
+testvm-wus-01_disk1_892b6f19ea9c44d589ef6fbda996b7bd LEARN-875E5912-A77D-481A-80…
+testvm-wus-01                                        learn-875e5912-a77d-481a-80…
+testvm-wus-01/DependencyAgentLinux                   learn-875e5912-a77d-481a-80…
+testvm-wus-01/OMSAgentForLinux                       learn-875e5912-a77d-481a-80…
+testvm-wus-01                                        learn-875e5912-a77d-481a-80…
+testvm-wus-01                                        learn-875e5912-a77d-481a-80…
+testvm-01                                            learn-875e5912-a77d-481a-80…
+testvm-wus-01                                        learn-875e5912-a77d-481a-80…
+cloudshell1491541910                                 learn-875e5912-a77d-481a-80…
+
+Remove-AzVM -Name $vm.Name -ResourceGroupName $vm.ResourceGroupName -Confirm:$false
+
+Virtual machine removal operation
+This cmdlet will remove the specified virtual machine. Do you want to continue?
+[Y] Yes  [N] No  [S] Suspend  [?] Help (default is "Y"): Y
+
+OperationId : b276efb5-1b44-4047-84b5-1c656cf47233
+Status      : Succeeded
+StartTime   : 2/18/2023 1:45:56 PM
+EndTime     : 2/18/2023 1:46:12 PM
+Error       : 
+
+
+Get-AzDisk -ResourceGroupName $vm.ResourceGroupName -DiskName $vm.StorageProfile.OsDisk.Name | Remove-AzDisk -Force
+
+Name      : eeb2ea74-bf92-4930-8da1-fd3eafc58ae6
+StartTime : 2/18/2023 1:51:57 PM
+EndTime   : 2/18/2023 1:52:29 PM
+Status    : Succeeded
+Error     : 
+
+
+
