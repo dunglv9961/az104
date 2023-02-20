@@ -1,12 +1,12 @@
 $PSVersionTable.PSVersion
 
-Get-Help -Name Get-ChildItem -Detailed
+# Get-Help -Name Get-ChildItem -Detailed
 Get-Module 
 Install-Module -Name Az -Scope CurrentUser -Repository PSGallery
 
 Update-Module -Name Az
 
-Get-Help 
+# Get-Help 
 Connect-AzAccount
 
 Get-AzContext
@@ -32,6 +32,8 @@ $vm = Get-AzVM -Name MyVM -ResourceGroupName $ResourceGroupName
 $vm.HardwareProfile.VmSize = "Standard_DS3_v2"
 
 Update-AzVM -ResourceGroupName $ResourceGroupName -VM $vm
+
+Get-AzResource -ResourceType Microsoft.Compute/virtualMachines
 
 Remove-AzResourceGroup -Name $resourceGroupName -Force
 
