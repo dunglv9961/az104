@@ -14,7 +14,7 @@ Get-AzContext
 Get-AzSubscription
 
 #Change the subscription by passing the name of the one to select.
-Set-AzContext -Subscription 'da8cb5e7-e4a2-4eaf-89aa-4cf044ce488f'
+Set-AzContext -Subscription ''
 
 Get-AzResourceGroup | Format-Table
 

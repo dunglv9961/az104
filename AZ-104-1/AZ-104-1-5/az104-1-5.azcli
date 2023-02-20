@@ -4,4 +4,51 @@ az find "az vm create"
 
 az storage blob --help
 
+az login
+
+# Create
+az group create --name <name> --location <location>
+
+# Verify
+az group list
+az group list --output table
+
+#-------------------------------------
+export RESOURCE_GROUP=learn-796f5ada-13b0-4605-9dec-936dd46fe628
+export AZURE_REGION=centralus
+export AZURE_APP_PLAN=popupappplan-$RANDOM
+export AZURE_WEB_APP=popupwebapp-$RANDOM
+
+# ask the Azure CLI to list all your resource groups in a table
+az group list --output table
+
+# If you have several items in the group list, you can filter the return values by adding a --query option. 
+# Try the following command:
+az group list --query "[?name == '$RESOURCE_GROUP']"
+
+# see the other pricing tiers.
+az appservice plan create --help
+
+# Create an App Service plan to run your app specifies the free pricing tier.
+az appservice plan create --name $AZURE_APP_PLAN --resource-group $RESOURCE_GROUP --location $AZURE_REGION --sku FREE
+
+# Verify that the service plan was created successfully by listing all your plans in a table.
+az appservice plan list --output table
+
+
+# -----------------Steps to create a web app---------------
+# 1.  create the web app
+az webapp create --name $AZURE_WEB_APP --resource-group $RESOURCE_GROUP --plan $AZURE_APP_PLAN
+# 2. Verify that the app was created successfully by listing all your apps in a table.
+az webapp list --output table
+
+# -----------------Steps to deploy code from GitHub-------------
+# 1. deploy code from a GitHub repository to the web app
+az webapp deployment source config --name $AZURE_WEB_APP --resource-group $RESOURCE_GROUP --repo-url "https://github.com/Azure-Samples/php-docs-hello-world" --branch master --manual-integration
+
+
+
+
+
+
 
