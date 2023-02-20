@@ -1,0 +1,7 @@
+az find blob
+az find "az vm"
+az find "az vm create"
+
+az storage blob --help
+
+

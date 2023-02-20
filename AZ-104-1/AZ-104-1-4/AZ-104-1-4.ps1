@@ -18,14 +18,19 @@ Set-AzContext -Subscription 'da8cb5e7-e4a2-4eaf-89aa-4cf044ce488f'
 
 Get-AzResourceGroup | Format-Table
 
-$resourceGroupName = "az104-4"
+$resourceGroupName = "az104-1-4"
+$vmName = "az-104-4-vm"
 New-AzResourceGroup -Name $resourceGroupName -Location "southeastasia"
 
 Get-AzResource
 
-New-AzVM -ResourceGroupName $resourceGroupName -Name "az-104-4-vm" -Location "southeastasia" -Credential (Get-Credential)
+New-AzVM -ResourceGroupName $resourceGroupName -Name $vmName -Location "southeastasia" -Credential (Get-Credential)
 
 Get-AzVM -Status
+
+Stop-AzVM -Name $vmName -ResourceGroupName @resourceGroupName
+
+Restart-AzVM -ResourceGroupName $resourceGroupName -Name $vmName
 
 $ResourceGroupName = "ExcerciseResources"
 $vm = Get-AzVM -Name MyVM -ResourceGroupName $ResourceGroupName
