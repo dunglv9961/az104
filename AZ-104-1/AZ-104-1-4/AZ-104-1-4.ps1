@@ -2,7 +2,7 @@ $PSVersionTable.PSVersion
 
 # Get-Help -Name Get-ChildItem -Detailed
 Get-Module 
-Install-Module -Name Az -Scope CurrentUser -Repository PSGallery
+Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
 
 Update-Module -Name Az
 
