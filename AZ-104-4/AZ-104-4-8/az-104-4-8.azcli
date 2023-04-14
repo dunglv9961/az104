@@ -1,0 +1,117 @@
+# Create a Linux virtual machine
+az vm create \
+  --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0 \
+  --location westus \
+  --name SampleVM \
+  --image UbuntuLTS \
+  --admin-username azureuser \
+  --generate-ssh-keys \
+  --verbose --no-wait
+
+# Listing images
+az vm image list --output table
+
+az vm image list --sku Wordpress --output table --all
+
+az vm image list --publisher Microsoft --outpur table --all
+
+az vm image list --location eatus --output table
+
+az vm list-sizes --location eastus --output table
+
+# Specify a size during VM creation
+az vm create \
+    --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0 \
+    --name SampleVM2 \
+    --image UbuntuLTS \
+    --admin-username azureuser \
+    --generate-ssh-keys \
+    --verbose \
+    --size "Standard_DS2_v2" --no-wait
+
+# Resize an existing VM
+# check to see if the desired size is available in the cluster our VM is part of
+az vm list-vm-resize-options \
+    --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0 \
+    --name SampleVM \
+    --output table
+
+# resize a VM
+az vm resize \
+    --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0 \
+    --name SampleVM \
+    --size Standard_D2s_v3
+
+# return all virtual machines defined in this subscription.
+az vm list --output table
+
+# Get the IP address
+az vm list-ip-addresses -n SampleVM -o table
+
+# Get VM details
+az vm show --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0 --name SampleVM
+
+# Filter your Azure CLI queries
+# retrieve the admin username
+az vm show \
+    --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0 \
+    --name SampleVM \
+    --query "osProfile.adminUsername"
+
+# get the size assigned to our VM:
+az vm show \
+    --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0 \
+    --name SampleVM \
+    --query hardwareProfile.vmSize
+
+# retrieve all the IDs for your network interfaces
+az vm show \
+    --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0 \
+    --name SampleVM \
+    --query "networkProfile.networkInterfaces[].id"
+
+# return results that only include the actual data values with tab separators.
+az vm show \
+    --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0 \
+    --name SampleVM \
+    --query "networkProfile.networkInterfaces[].id" -o tsv
+
+# Stop a VM
+az vm stop \
+    --name SampleVM \
+    --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0
+
+# verify the VM has stopped by attempting to ping the public IP address, using ssh, or through the vm get-instance-view command
+az vm get-instance-view \
+    --name SampleVM \
+    --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0 \
+    --query "instanceView.statuses[?starts_with(code, 'PowerState/')].displayStatus" -o tsv
+
+# Start a VM
+az vm start \
+    --name SampleVM \
+    --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0 --no-wait
+
+# verify it through the vm get-instance-view query we used in the last section, which should now return VM running.
+az vm get-instance-view \
+    --name SampleVM \
+    --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0 \
+    --query "instanceView.statuses[?starts_with(code, 'PowerState/')].displayStatus" -o tsv
+
+# Restart a VM
+az vm restart \
+    --name SampleVM \
+    --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0
+
+# Install NGINX web server
+# Locate the public IP address of your SampleVM Linux virtual machine.
+az vm list-ip-addresses --name SampleVM --output table
+
+ # open port 80:
+ az vm open-port \
+    --port 80 \
+    --resource-group learn-cd57a0a8-1cf8-4693-b24b-c7e4feb94fe0 \
+    --name SampleVM
+
+
+

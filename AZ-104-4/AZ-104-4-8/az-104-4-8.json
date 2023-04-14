@@ -1,0 +1,29 @@
+{
+    "SampleVM":[
+        {
+            "fqdns": "",
+            "id": "/subscriptions/2e1983f3-941c-4481-8078-59770cd89928/resourceGroups/learn-31e054cb-3219-450d-8ff9-7051ce14e3b7/providers/Microsoft.Compute/virtualMachines/SampleVM",
+            "location": "westus",
+            "macAddress": "00-22-48-05-C4-8D",
+            "powerState": "VM running",
+            "privateIpAddress": "10.0.0.4",
+            "publicIpAddress": "104.42.196.70",
+            "resourceGroup": "learn-31e054cb-3219-450d-8ff9-7051ce14e3b7",
+            "zones": ""
+        }
+    ],
+
+    "SampleVM2": [
+        {
+            "fqdns": "",
+            "id": "/subscriptions/2e1983f3-941c-4481-8078-59770cd89928/resourceGroups/learn-31e054cb-3219-450d-8ff9-7051ce14e3b7/providers/Microsoft.Compute/virtualMachines/SampleVM2",
+            "location": "westus",
+            "macAddress": "00-0D-3A-35-09-6A",
+            "powerState": "VM running",
+            "privateIpAddress": "10.0.0.5",
+            "publicIpAddress": "40.78.40.102",
+            "resourceGroup": "learn-31e054cb-3219-450d-8ff9-7051ce14e3b7",
+            "zones": ""
+          }
+    ]
+}
