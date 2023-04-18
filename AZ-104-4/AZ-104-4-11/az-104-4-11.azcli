@@ -1,0 +1,8 @@
+USERNAME = azureuser
+PASSWORD = $(openssl rand -base64 32)
+RESOURCE_GROUP = ""
+
+az vm create --resource-group $RESOURCE_GROUP --name myVM --image win2019datacenter --admin-user $USERNAME --admin-password $PASSWORD
+
+az vm open-port --port 80 --resource-group $RESOURCE-GROUP --name myVM
+
