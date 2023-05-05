@@ -1,0 +1,160 @@
+# create the virtual network and subnet for the Sales systems
+az network vnet create \
+    --resource-group [sandbox resource group name] \
+    --name SalesVNet \
+    --address-prefixes 10.1.0.0/16 \
+    --subnet-name Apps \
+    --subnet-prefixes 10.1.1.0/24 \
+    --location northeurope
+
+# create the virtual network and subnet for the Marketing systems
+az network vnet create \
+    --resource-group [sandbox resource group name] \
+    --name MarketingVNet \
+    --address-prefixes 10.2.0.0/16 \
+    --subnet-name Apps \
+    --subnet-prefixes 10.2.1.0/24 \
+    --location northeurope
+
+# create the virtual network and subnet for the Research systems
+az network vnet create \
+    --resource-group [sandbox resource group name] \
+    --name ResearchVNet \
+    --address-prefixes 10.3.0.0/16 \
+    --subnet-name Data \
+    --subnet-prefixes 10.3.1.0/24 \
+    --location westeurope
+
+# view the virtual networks
+az network vnet list --query "[?contains(provisioningState, 'Succeeded')]" --output table
+
+# create an Ubuntu VM in the Apps subnet of SalesVNet
+az vm create \
+    --resource-group [sandbox resource group name] \
+    --no-wait \
+    --name SalesVM \
+    --location northeurope \
+    --vnet-name SalesVNet \
+    --subnet Apps \
+    --image UbuntuLTS \
+    --admin-username azureuser \
+    --admin-password <password>
+
+# create another Ubuntu VM in the Apps subnet of MarketingVNet
+az vm create \
+    --resource-group [sandbox resource group name] \
+    --no-wait \
+    --name MarketingVM \
+    --location northeurope \
+    --vnet-name MarketingVNet \
+    --subnet Apps \
+    --image UbuntuLTS \
+    --admin-username azureuser \
+    --admin-password <password>
+
+# create an Ubuntu VM in the Data subnet of ResearchVNet
+az vm create \
+    --resource-group [sandbox resource group name] \
+    --no-wait \
+    --name ResearchVM \
+    --location westeurope \
+    --vnet-name ResearchVNet \
+    --subnet Data \
+    --image UbuntuLTS \
+    --admin-username azureuser \
+    --admin-password <password>
+
+# To confirm that the VMs are running
+watch -d -n 5 "az vm list \
+    --resource-group [sandbox resource group name] \
+    --show-details \
+    --query '[*].{Name:name, ProvisioningState:provisioningState, PowerState:powerState}' \
+    --output table"
+
+
+
+# create the peering connection between the SalesVNet and MarketingVNet virtual networks
+az network vnet peering create \
+    --name SalesVNet-To-MarketingVNet \
+    --remote-vnet MarketingVNet \
+    --resource-group [sandbox resource group name] \
+    --vnet-name SalesVNet \
+    --allow-vnet-access
+
+az network vnet peering create \
+    --name MarketingVNet-To-SalesVNet \
+    --remote-vnet SalesVNet \
+    --resource-group [sandbox resource group name] \
+    --vnet-name MarketingVNet \
+    --allow-vnet-access
+
+
+# create the peering connection between the MarketingVNet and ResearchVNet virtual networks
+az network vnet peering create \
+    --name MarketingVNet-To-ResearchVNet \
+    --remote-vnet ResearchVNet \
+    --resource-group [sandbox resource group name] \
+    --vnet-name MarketingVNet \
+    --allow-vnet-access
+
+az network vnet peering create \
+    --name ResearchVNet-To-MarketingVNet \
+    --remote-vnet MarketingVNet \
+    --resource-group [sandbox resource group name] \
+    --vnet-name ResearchVNet \
+    --allow-vnet-access
+
+
+# Check the virtual network peering connections
+# check the connection between SalesVNet and MarketingVNet
+az network vnet peering list \
+    --resource-group [sandbox resource group name] \
+    --vnet-name SalesVNet \
+    --query "[].{Name:name, Resource:resourceGroup, PeeringState:peeringState, AllowVnetAccess:allowVirtualNetworkAccess}"\
+    --output table
+# check the peering connection between the ResearchVNet and MarketingVNet virtual networks
+az network vnet peering list \
+    --resource-group [sandbox resource group name] \
+    --vnet-name ResearchVNet \
+    --query "[].{Name:name, Resource:resourceGroup, PeeringState:peeringState, AllowVnetAccess:allowVirtualNetworkAccess}"\
+    --output table
+# check the peering connections for the MarketingVNet virtual network
+az network vnet peering list \
+    --resource-group [sandbox resource group name] \
+    --vnet-name MarketingVNet \
+    --query "[].{Name:name, Resource:resourceGroup, PeeringState:peeringState, AllowVnetAccess:allowVirtualNetworkAccess}"\
+    --output table
+
+
+# Check effective routes
+# routes that apply to the SalesVM network interface
+az network nic show-effective-route-table \
+    --resource-group [sandbox resource group name] \
+    --name SalesVMVMNic \
+    --output table
+# look at the routes for MarketingVM
+az network nic show-effective-route-table \
+    --resource-group [sandbox resource group name] \
+    --name MarketingVMVMNic \
+    --output table
+# look at the routes for ResearchVM
+az network nic show-effective-route-table \
+    --resource-group [sandbox resource group name] \
+    --name ResearchVMVMNic \
+    --output table
+
+
+# list the IP addresses
+az vm list \
+    --resource-group [sandbox resource group name] \
+    --query "[*].{Name:name, PrivateIP:privateIps, PublicIP:publicIps}" \
+    --show-details \
+    --output table
+
+
+
+
+
+
+
+
