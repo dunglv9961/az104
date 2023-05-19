@@ -1,0 +1,9 @@
+az vm create \
+    --resource-group rg1 --location westus \
+    --name SampleVM1 --image Ubuntu2204 --admin-username azureuser \
+    --generate-ssh-keys --verbose --no-wait
+
+az vm create --resource-group rg1 --location westus --name SampleVM2 --image Ubuntu2204 \
+    --admin-username azureuser --gernerate-ssh-keys --verbose --no-wait
+    
+        
